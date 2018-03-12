@@ -33,6 +33,8 @@ public class AddItemActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_item_button);
         addButton.setEnabled(false);
 
+        priceEditText.setHint(getResources().getString(R.string.add_item_price_hint)+getResources().getString(R.string.add_item_ruble));
+
         nameEditText.addTextChangedListener(new LocalTextWatcher(nameEditText));
         priceEditText.addTextChangedListener(new LocalTextWatcher(priceEditText));
 
