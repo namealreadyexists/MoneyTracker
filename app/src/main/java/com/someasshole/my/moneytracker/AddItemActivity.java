@@ -3,6 +3,7 @@ package com.someasshole.my.moneytracker;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -81,6 +82,16 @@ public class AddItemActivity extends AppCompatActivity {
                 case R.id.add_item_price:{
                     if(editable.toString().equals(c)) isPrice = false;
                     else isPrice = true;
+
+                    if (!TextUtils.isEmpty(priceEditText.getText()) && !priceEditText.getText().toString().endsWith(c.toString())) {
+                        priceEditText.setText(priceEditText.getText() + c.toString());
+                        priceEditText.setSelection(priceEditText.length() - 1); // Спасибо Седых Анне
+                    }
+                    if (priceEditText.getText().toString().equals(c)) {
+                        priceEditText.setText("");
+                    }
+
+
                     break;}
                 default: {// doing nothing
                     break;}
