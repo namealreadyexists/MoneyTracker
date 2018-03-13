@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- text sizes -->
     <dimen name="text_size">20sp</dimen>
+    <!-- sizes -->
+    <dimen name="add_item_item_size">68dp</dimen>
+    <dimen name="add_item_button_add_size">24dp</dimen>
+    <!-- indents -->
+    <dimen name="add_item_left_right_indent">24dp</dimen>
+    <dimen name="add_item_between_button_indent">24dp</dimen>
+    <dimen name="add_item_between_edittext_indent">8dp</dimen>
 </resources>

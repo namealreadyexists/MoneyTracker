@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.someasshole.my.moneytracker.AddItemActivity"
+    android:orientation="vertical"
+    android:background="@drawable/bg_pattern"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/add_item_item_size"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/add_item_left_right_indent"
+        android:paddingRight="@dimen/add_item_left_right_indent"
+        android:background="@color/colorAddItem"
+        >
+
+        <EditText
+            android:id="@+id/add_item_name"
+            android:background="@null"
+            android:gravity="left"
+            android:hint="@string/add_item_name_hint"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:lines="1"
+            android:textColor="@color/colorAddItemItems"/>
+
+        <EditText
+            android:id="@+id/add_item_price"
+            android:background="@null"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/add_item_between_edittext_indent"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:lines="1"
+            android:textColor="@color/colorAddItemItems"/>
+
+        <Button
+            android:id="@+id/add_item_button"
+            android:background="@drawable/ic_add"
+            android:enabled="false"
+            android:layout_width="@dimen/add_item_button_add_size"
+            android:layout_height="@dimen/add_item_button_add_size"
+            android:layout_marginLeft="@dimen/add_item_between_button_indent"
+            android:tint="@color/colorAddItemItems"/>
+
+    </LinearLayout>
+
+</LinearLayout>
