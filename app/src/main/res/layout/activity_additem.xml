@@ -35,7 +35,6 @@
             android:id="@+id/add_item_price"
             android:background="@null"
             android:gravity="right"
-            android:hint="@string/add_item_price_hint"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/add_item_between_edittext_indent"

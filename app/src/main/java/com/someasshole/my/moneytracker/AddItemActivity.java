@@ -3,7 +3,6 @@ package com.someasshole.my.moneytracker;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -25,40 +24,32 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additem);
-
         setTitle(R.string.add_item_title);
-
         nameEditText = findViewById(R.id.add_item_name);
         priceEditText = findViewById(R.id.add_item_price);
         addButton = findViewById(R.id.add_item_button);
-        addButton.setEnabled(false);
 
-        priceEditText.setHint(getResources().getString(R.string.add_item_price_hint)+getResources().getString(R.string.add_item_ruble));
+        addButton.setEnabled(false);
+        priceEditText.setHint(getApplicationContext().getString(R.string.add_item_ruble_placeholder,getResources().getString(R.string.add_item_price_hint)));
 
         nameEditText.addTextChangedListener(new LocalTextWatcher(nameEditText));
         priceEditText.addTextChangedListener(new LocalTextWatcher(priceEditText));
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String price = priceEditText.getText().toString();
-
                 Log.i(TAG,"Button pressed");
             }
         });
     }
 
-    private boolean checkSetButtonActive(){
-        if (isName && isPrice) return true;
-        return false;
-    }
-
     private class LocalTextWatcher implements TextWatcher{
 
         private EditText mView;
+
         private int mViewId;
-        private CharSequence c;
+        private String c;
 
         private LocalTextWatcher(EditText view){
             this.mView = view;
@@ -76,29 +67,18 @@ public class AddItemActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            switch (mViewId){
-                case R.id.add_item_name: {
-                    if(editable.toString().isEmpty()) isName = false;
-                    else isName = true;
-                    break;}
-                case R.id.add_item_price:{
-                    if(editable.toString().equals(c)) isPrice = false;
-                    else isPrice = true;
-
-                    if (!TextUtils.isEmpty(priceEditText.getText()) && !priceEditText.getText().toString().endsWith(c.toString())) {
-                        priceEditText.setText(priceEditText.getText() + c.toString());
-                        priceEditText.setSelection(priceEditText.length() - 1); // Спасибо Седых Анне
-                    }
-                    if (priceEditText.getText().toString().equals(c)) {
-                        priceEditText.setText("");
-                    }
-
-
-                    break;}
-                default: {// doing nothing
-                    break;}
+            if(mViewId==R.id.add_item_name) isName=!(editable.toString().isEmpty());
+            if(mViewId==R.id.add_item_price) {
+                isPrice=!(editable.toString().isEmpty());
+                String tmpStr = priceEditText.getText().toString();
+                if (!tmpStr.isEmpty()&&!tmpStr.endsWith(c)) {
+                    String tmp = getApplicationContext().getString(R.string.add_item_ruble_placeholder,editable.toString());
+                    priceEditText.setText(tmp);
+                    priceEditText.setSelection(priceEditText.length() - 1); // Спасибо Седых Анне
                 }
-            addButton.setEnabled(checkSetButtonActive());
+                if (tmpStr.equals(c)) priceEditText.setText("");
+            }
+            addButton.setEnabled(isName && isPrice);
         }
     }
 }
