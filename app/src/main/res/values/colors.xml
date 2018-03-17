@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#95c9b8</color>
+    <color name="colorPrimaryDark">#88B7A7</color>
+    <color name="colorAccent">#1ca498</color>
 
     <color name="colorText">#ffffff</color>
     <color name="colorTextBackground">#84c0c5</color>
     <color name="colorAddItem">#ffffff</color>
     <color name="colorAddItemItems">#95a5a6</color>
+    <color name="colorBackgroundItemName">#fcc31e</color>
+    <color name="colorBackgroundItemPrice">#e67e22</color>
+
 </resources>
