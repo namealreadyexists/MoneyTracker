@@ -51,20 +51,20 @@ public class ListItemFragment extends Fragment {
 
         Context mContext = getActivity().getApplicationContext();
         mRecords = new ArrayList<>();
-        mRecords.add(new Record(mContext,"Milk",90,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",80,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",70,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",60,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",50,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",40,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",30,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",20,Record.TYPE_EXPENSES));
-        mRecords.add(new Record(mContext,"Milk",10,Record.TYPE_INCOMES));
-        mRecords.add(new Record(mContext,"Milk",9,Record.TYPE_INCOMES));
-        mRecords.add(new Record(mContext,"Milk",8,Record.TYPE_INCOMES));
-        mRecords.add(new Record(mContext,"Milk",7,Record.TYPE_INCOMES));
-        mRecords.add(new Record(mContext,"Milk",6,Record.TYPE_INCOMES));
-        mRecords.add(new Record(mContext,"Milk",5,Record.TYPE_INCOMES));
+        mRecords.add(new Record("Milk",90,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",80,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",70,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",60,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",50,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",40,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",30,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",20,Record.TYPE_EXPENSES));
+        mRecords.add(new Record("Milk",10,Record.TYPE_INCOMES));
+        mRecords.add(new Record("Milk",9,Record.TYPE_INCOMES));
+        mRecords.add(new Record("Milk",8,Record.TYPE_INCOMES));
+        mRecords.add(new Record("Milk",7,Record.TYPE_INCOMES));
+        mRecords.add(new Record("Milk",6,Record.TYPE_INCOMES));
+        mRecords.add(new Record("Milk",5,Record.TYPE_INCOMES));
         mAdapter = new ListItemAdapter(mRecords);
 
         Bundle args = getArguments();

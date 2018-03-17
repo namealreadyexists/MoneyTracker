@@ -1,22 +1,20 @@
 package com.someasshole.my.moneytracker;
 
-import android.content.Context;
-
 public class Record {
 
     protected static final String TYPE_INCOMES = "incomes";
     protected static final String TYPE_EXPENSES = "expenses";
     protected static final String TYPE_UNKNOWN = "unknown";
 
+    protected static final String RUB = "₽";
+
     private String name;
     private int price;
     private String type;
-    private Context mContext;
 
-    protected Record(Context context, String name, int price, String type){
+    protected Record(String name, int price, String type){
         this.name = name;
         this.price=price;
-        this.mContext = context;
         this.type = type;
     }
 
@@ -33,7 +31,7 @@ public class Record {
     }
 
     protected String getPriceBeautify(){
-        return mContext.getString(R.string.add_item_ruble_placeholder,String.valueOf(this.getPrice()));
+        return String.valueOf(this.price)+RUB;
     }
 
     public void setPrice(int price) {
