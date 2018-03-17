@@ -1,17 +1,21 @@
 package com.someasshole.my.moneytracker;
 
-/**
- * Created by transcend on 13.03.2018.
- */
-
 public class Record {
+
+    protected static final String TYPE_INCOMES = "incomes";
+    protected static final String TYPE_EXPENSES = "expenses";
+    protected static final String TYPE_UNKNOWN = "unknown";
+
+    protected static final String RUB = "₽";
 
     private String name;
     private int price;
+    private String type;
 
-    public Record(String name, int price){
+    protected Record(String name, int price, String type){
         this.name = name;
         this.price=price;
+        this.type = type;
     }
 
     public String getName() {
@@ -22,11 +26,23 @@ public class Record {
         this.name = name;
     }
 
-    public int getPrice() {
+    protected int getPrice() {
         return price;
+    }
+
+    protected String getPriceBeautify(){
+        return String.valueOf(this.price)+RUB;
     }
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
