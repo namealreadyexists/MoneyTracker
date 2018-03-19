@@ -19,10 +19,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by transcend on 17.03.2018.
- */
-
 public class ListItemFragment extends Fragment {
 
     private static final String TAG = ListItemFragment.class.getSimpleName();
@@ -43,7 +39,6 @@ public class ListItemFragment extends Fragment {
 
         if(type.equals(TYPE_INCOMES)) args.putString(ListItemFragment.ARGUMENT_TYPE_KEY, ListItemFragment.TYPE_INCOMES);
         if(type.equals(TYPE_EXPENSES)) args.putString(ListItemFragment.ARGUMENT_TYPE_KEY, ListItemFragment.TYPE_EXPENSES);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,22 +55,6 @@ public class ListItemFragment extends Fragment {
 
         mRecords = new ArrayList<>();
         mRecords = Collections.emptyList();
-        /*
-        mRecords.add(new Record("Milk",90,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",80,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",70,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",60,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",50,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",40,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",30,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",20,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",10,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",9,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",8,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",7,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",6,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",5,Record.TYPE_INCOMES));
-        */
         mAdapter = new ListItemAdapter(mRecords);
 
         Bundle args = getArguments();
@@ -155,7 +134,6 @@ public class ListItemFragment extends Fragment {
                 Log.e(TAG, "onResponse: ");
                 mAdapter.setData(response.body());
             }
-
             @Override
             public void onFailure(Call<RecordList> call, Throwable t) {
                 Log.e(TAG, "onFailure: " +t.toString());
