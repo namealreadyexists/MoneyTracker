@@ -6,10 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-/**
- * Created by transcend on 17.03.2018.
- */
-
 public class MainPagesAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = MainPagesAdapter.class.getSimpleName();
