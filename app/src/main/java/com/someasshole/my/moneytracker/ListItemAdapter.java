@@ -1,6 +1,7 @@
 package com.someasshole.my.moneytracker;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,18 @@ import java.util.List;
 
 class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolder>{
 
+    private static final String TAG = ListItemAdapter.class.getSimpleName();
+
     private List<Record> mRecordList;
     public ListItemAdapter(List<Record> records){
         mRecordList = records;
+    }
+    protected void setData(ServerResponse serverResponse){
+        Log.e(TAG, "setData: " + serverResponse.status);
+        if (serverResponse.status.equals(ServerResponse.STATE_SUCCSESS)) {
+            mRecordList = serverResponse.mRecords;
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -29,6 +39,7 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     }
     @Override
     public int getItemCount(){
+        if (mRecordList==null){return 0;}
         return mRecordList.size();
     }
 

@@ -12,29 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by transcend on 17.03.2018.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListItemFragment extends Fragment {
 
     private static final String TAG = ListItemFragment.class.getSimpleName();
     private static final String ARGUMENT_TYPE_KEY = "type";
-    public static final String TYPE_INCOMES = "incomes";
-    public static final String TYPE_EXPENSES = "expenses";
+    public static final String TYPE_INCOMES = "income";
+    public static final String TYPE_EXPENSES = "expense";
     private static final String TYPE_UNKNOWN = "unknown";
 
     private String type;
     private ListItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<Record> mRecords;
+    private Api mApi;
 
     public static ListItemFragment createItemsFragment(String type){
         ListItemFragment fragment = new ListItemFragment();
         Bundle args = new Bundle();
-        args.putString(ListItemFragment.ARGUMENT_TYPE_KEY, ListItemFragment.TYPE_INCOMES);
+
+        if(type.equals(TYPE_INCOMES)) args.putString(ListItemFragment.ARGUMENT_TYPE_KEY, ListItemFragment.TYPE_INCOMES);
+        if(type.equals(TYPE_EXPENSES)) args.putString(ListItemFragment.ARGUMENT_TYPE_KEY, ListItemFragment.TYPE_EXPENSES);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,22 +53,8 @@ public class ListItemFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        Context mContext = getActivity().getApplicationContext();
         mRecords = new ArrayList<>();
-        mRecords.add(new Record("Milk",90,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",80,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",70,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",60,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",50,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",40,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",30,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",20,Record.TYPE_EXPENSES));
-        mRecords.add(new Record("Milk",10,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",9,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",8,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",7,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",6,Record.TYPE_INCOMES));
-        mRecords.add(new Record("Milk",5,Record.TYPE_INCOMES));
+        mRecords = Collections.emptyList();
         mAdapter = new ListItemAdapter(mRecords);
 
         Bundle args = getArguments();
@@ -72,6 +62,8 @@ public class ListItemFragment extends Fragment {
         if(type.equals(TYPE_UNKNOWN)){
             throw new IllegalArgumentException("Unknown argument type");
         }
+        Log.e(TAG, "type="+type);
+        mApi = ((App) getActivity().getApplication()).getApi();
         Log.i(TAG, "onCreate: ");
     }
 
@@ -89,6 +81,7 @@ public class ListItemFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        loadItems();
         Log.i(TAG, "onViewCreated: ");
     }
     @Override
@@ -130,5 +123,21 @@ public class ListItemFragment extends Fragment {
     public void onDetach(){
         super.onDetach();
         Log.i(TAG, "onDetach: ");
+    }
+
+    private void loadItems(){
+        Log.e(TAG,"Loading items");
+        Call<ServerResponse> call = mApi.getItems(type);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                Log.e(TAG, "onResponse: ");
+                mAdapter.setData(response.body());
+            }
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " +t.toString());
+            }
+        });
     }
 }
