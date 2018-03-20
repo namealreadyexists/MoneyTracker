@@ -17,10 +17,12 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     public ListItemAdapter(List<Record> records){
         mRecordList = records;
     }
-    protected void setData(RecordList records){
-        Log.e(TAG, "setData: " + records.mRecords);
-         mRecordList = records.mRecords;
-         notifyDataSetChanged();
+    protected void setData(ServerResponse serverResponse){
+        Log.e(TAG, "setData: " + serverResponse.status);
+        if (serverResponse.status.equals(ServerResponse.STATE_SUCCSESS)) {
+            mRecordList = serverResponse.mRecords;
+            notifyDataSetChanged();
+        }
     }
 
     @Override

@@ -127,15 +127,15 @@ public class ListItemFragment extends Fragment {
 
     private void loadItems(){
         Log.e(TAG,"Loading items");
-        Call<RecordList> call = mApi.getItems(type);
-        call.enqueue(new Callback<RecordList>() {
+        Call<ServerResponse> call = mApi.getItems(type);
+        call.enqueue(new Callback<ServerResponse>() {
             @Override
-            public void onResponse(Call<RecordList> call, Response<RecordList> response) {
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 Log.e(TAG, "onResponse: ");
                 mAdapter.setData(response.body());
             }
             @Override
-            public void onFailure(Call<RecordList> call, Throwable t) {
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
                 Log.e(TAG, "onFailure: " +t.toString());
             }
         });
