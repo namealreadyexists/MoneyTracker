@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
@@ -12,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabLayout);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(R.string.toolbar_account);
 
         MainPagesAdapter mainPagesAdapter = new MainPagesAdapter(this,getSupportFragmentManager());
         mViewPager.setAdapter(mainPagesAdapter);

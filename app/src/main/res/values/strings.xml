@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
     <string name="hello_world">Hello World!</string>
+    <string name="toolbar_account">Учет бюджета</string>
+    <string name="toolbar_balance">Баланс</string>
     <string name="add_item_title">Новая запись</string>
     <string name="add_item_name_hint">Название</string>
     <string name="add_item_ruble_placeholder">%1$s₽</string>

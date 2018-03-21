@@ -1,9 +1,14 @@
 package com.someasshole.my.moneytracker;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,11 +31,14 @@ public class ListItemFragment extends Fragment {
     public static final String TYPE_INCOMES = "income";
     public static final String TYPE_EXPENSES = "expense";
     private static final String TYPE_UNKNOWN = "unknown";
+    private static final int ADD_ITEM_REQUEST_CODE = 0;
 
     private String type;
     private ListItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<Record> mRecords;
+    private FloatingActionButton fab;
+    SwipeRefreshLayout swipeRefreshLayout;
     private Api mApi;
 
     public static ListItemFragment createItemsFragment(String type){
@@ -81,6 +89,25 @@ public class ListItemFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(),AddItemActivity.class);
+                intent.putExtra(AddItemActivity.TYPE_KEY,type);
+                startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
+            }
+        });
+
+        swipeRefreshLayout = view.findViewById(R.id.refresh);
+        swipeRefreshLayout.setColorSchemeColors(Color.BLUE,Color.CYAN,Color.GREEN);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+            }
+        });
+
         loadItems();
         Log.i(TAG, "onViewCreated: ");
     }
@@ -125,6 +152,22 @@ public class ListItemFragment extends Fragment {
         Log.i(TAG, "onDetach: ");
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,Intent data){
+
+        if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
+            String name = data.getStringExtra(AddItemActivity.ARG_NAME);
+            String price = data.getStringExtra(AddItemActivity.ARG_PRICE);
+
+            Record record = new Record(name,price,type);
+            mAdapter.addData(record);
+
+            Log.e(TAG, "onActivityResult: name="+name + " | price="+price);
+        }
+
+        super.onActivityResult(requestCode,resultCode,data);
+    }
+
     private void loadItems(){
         Log.e(TAG,"Loading items");
         Call<ServerResponse> call = mApi.getItems(type);
@@ -133,9 +176,11 @@ public class ListItemFragment extends Fragment {
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 Log.e(TAG, "onResponse: ");
                 mAdapter.setData(response.body());
+                swipeRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
                 Log.e(TAG, "onFailure: " +t.toString());
             }
         });
