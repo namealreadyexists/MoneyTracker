@@ -3,10 +3,8 @@ package com.someasshole.my.moneytracker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,16 +26,15 @@ public class ListItemFragment extends Fragment {
 
     private static final String TAG = ListItemFragment.class.getSimpleName();
     private static final String ARGUMENT_TYPE_KEY = "type";
-    public static final String TYPE_INCOMES = "income";
-    public static final String TYPE_EXPENSES = "expense";
-    private static final String TYPE_UNKNOWN = "unknown";
-    private static final int ADD_ITEM_REQUEST_CODE = 0;
+    protected static final String TYPE_INCOMES = "income";
+    protected static final String TYPE_EXPENSES = "expense";
+    protected static final String TYPE_UNKNOWN = "unknown";
+    protected static final int ADD_ITEM_REQUEST_CODE = 0;
 
     private String type;
-    private ListItemAdapter mAdapter;
+    public ListItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<Record> mRecords;
-    private FloatingActionButton fab;
     SwipeRefreshLayout swipeRefreshLayout;
     private Api mApi;
 
@@ -89,18 +86,9 @@ public class ListItemFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-        fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(),AddItemActivity.class);
-                intent.putExtra(AddItemActivity.TYPE_KEY,type);
-                startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
-            }
-        });
 
         swipeRefreshLayout = view.findViewById(R.id.refresh);
-        swipeRefreshLayout.setColorSchemeColors(Color.BLUE,Color.CYAN,Color.GREEN);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -156,15 +144,16 @@ public class ListItemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode,Intent data){
 
         if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            String name = data.getStringExtra(AddItemActivity.ARG_NAME);
-            String price = data.getStringExtra(AddItemActivity.ARG_PRICE);
+            Log.e(TAG, "onActivityResult: ");
 
-            Record record = new Record(name,price,type);
-            mAdapter.addData(record);
+            Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
 
-            Log.e(TAG, "onActivityResult: name="+name + " | price="+price);
+            if (record.getType().equals(type)){
+                mAdapter.addData(record);
+                Log.e(TAG, "fragment onActivityResult: name="+record.getName()+" | price="+record.getPrice()+" | type="+record.getType());
+            }
+
         }
-
         super.onActivityResult(requestCode,resultCode,data);
     }
 

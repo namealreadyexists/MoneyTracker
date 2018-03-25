@@ -30,4 +30,17 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/list_item_action_button_indent"
+        android:layout_marginEnd="@dimen/list_item_action_button_indent"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="@color/colorAddItem"
+        app:fabSize="normal"
+        android:layout_gravity="right|bottom"
+        />
 </android.support.design.widget.CoordinatorLayout>
