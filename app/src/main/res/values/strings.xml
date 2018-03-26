@@ -16,4 +16,9 @@
         <item>@string/tab_expenses</item>
         <item>@string/tab_balance</item>
     </string-array>
+    <string name="menu_item">Удалить</string>
+    <string name="sure">Вы уверены?</string>
+    <string name="delete">Удаление</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_margin="@dimen/list_record_indent"
+    android:background="@drawable/item_bg"
     >
 
     <TextView
@@ -13,7 +14,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/colorBackgroundItemName"
         android:gravity="left"
         android:padding="@dimen/list_item_indent"
         android:textColor="@color/colorText"
@@ -23,7 +23,7 @@
         android:id="@+id/list_item_price"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
-        android:background="@color/colorBackgroundItemPrice"
+        android:background="@color/colorShadow"
         android:gravity="center"
         android:padding="@dimen/list_item_indent"
         android:textColor="@color/colorText"

@@ -2,11 +2,13 @@ package com.someasshole.my.moneytracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private Toolbar mToolbar;
-    private String type;
     private MainPagesAdapter mainPagesAdapter;
-    private ListItemFragment currentFragment;
+    private ActionMode mActionMode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +68,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 switch (position){
-                    case MainPagesAdapter.PAGE_INCOMES: floatingActionButton.show();break;
-                    case MainPagesAdapter.PAGE_EXPENSES: floatingActionButton.show();break;
-                    case MainPagesAdapter.PAGE_BALANCE: floatingActionButton.hide();break;
+                    case MainPagesAdapter.PAGE_INCOMES: {
+                        floatingActionButton.show();
+                        break;
+                    }
+                    case MainPagesAdapter.PAGE_EXPENSES: {
+                        floatingActionButton.show();
+                        break;
+                    }
+                    case MainPagesAdapter.PAGE_BALANCE: {
+                        floatingActionButton.hide();
+                        break;
+                    }
                 }
+
+
             }
 
             @Override
@@ -80,9 +92,13 @@ public class MainActivity extends AppCompatActivity {
                         floatingActionButton.setEnabled(true);
                         break;
                         case ViewPager.SCROLL_STATE_DRAGGING:
-                        case ViewPager.SCROLL_STATE_SETTLING:
+                        case ViewPager.SCROLL_STATE_SETTLING:{
+                            if (mActionMode!=null){
+                                mActionMode.finish();
+                            }
                             floatingActionButton.setEnabled(false);
                             break;
+                        }
                 }
             }
         });
@@ -118,5 +134,17 @@ public class MainActivity extends AppCompatActivity {
         for (Fragment fragment: getSupportFragmentManager().getFragments()){
             fragment.onActivityResult(requestCode,resultCode,data);
         }
+    }
+    @Override
+    public void onSupportActionModeStarted(@NonNull ActionMode mode){
+        super.onSupportActionModeStarted(mode);
+        Log.i(TAG, "onSupportActionModeFinish: ");
+        mActionMode=mode;
+    }
+    @Override
+    public void onSupportActionModeFinished(@NonNull ActionMode mode){
+        super.onSupportActionModeFinished(mode);
+        Log.i(TAG, "onSupportActionModeFinished: ");
+        mActionMode = null;
     }
 }

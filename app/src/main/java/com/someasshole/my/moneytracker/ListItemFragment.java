@@ -1,16 +1,23 @@
 package com.someasshole.my.moneytracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListItemFragment extends Fragment implements ListItemAdapterListener{
+public class ListItemFragment extends Fragment{
 
     private static final String TAG = ListItemFragment.class.getSimpleName();
     private static final String ARGUMENT_TYPE_KEY = "type";
@@ -61,7 +68,7 @@ public class ListItemFragment extends Fragment implements ListItemAdapterListene
         mRecords = new ArrayList<>();
         mRecords = Collections.emptyList();
         mAdapter = new ListItemAdapter(mRecords);
-        mAdapter.setListener(this);
+        mAdapter.setListener(new AdapterListener());
 
         Bundle args = getArguments();
         type = args.getString(ARGUMENT_TYPE_KEY,TYPE_UNKNOWN);
@@ -157,15 +164,6 @@ public class ListItemFragment extends Fragment implements ListItemAdapterListene
         }
         super.onActivityResult(requestCode,resultCode,data);
     }
-    @Override
-    public void onItemClick(Record record, int position) {
-        Log.e(TAG, "onItemClick: "+record.name + " position: " +position);
-    }
-
-    @Override
-    public void onItemLongClick(Record record, int position) {
-        Log.e(TAG, "onItemLongClick: "+record.name + " position: " +position);
-    }
 
     private void loadItems(){
         Log.e(TAG,"Loading items");
@@ -185,4 +183,92 @@ public class ListItemFragment extends Fragment implements ListItemAdapterListene
         });
     }
 
+    /* ACTION MODE */
+
+    protected ActionMode mActionMode = null;
+
+    private void removeSelectedItems(){
+        for (int i = mAdapter.getSelectedItems().size()-1;i>=0;i--){
+            mAdapter.remove(mAdapter.getSelectedItems().get(i));
+        }
+        mActionMode.finish();
+    }
+
+    private class AdapterListener implements ListItemAdapterListener{
+        @Override
+        public void onItemClick(Record record, int position) {
+            if (isInActionMode()){
+                toggleSelection(position);
+            }
+            Log.e(TAG, "onItemClick: "+record.name + " position: " +position);
+        }
+
+        @Override
+        public void onItemLongClick(Record record, int position) {
+            if (isInActionMode()){
+                return;
+            }
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
+            toggleSelection(position);
+            Log.e(TAG, "onItemLongClick: "+record.name + " position: " +position);
+        }
+
+        private boolean isInActionMode(){
+            return mActionMode!=null;
+        }
+
+        private void toggleSelection(int position){
+            mAdapter.toggleSelection(position);
+        }
+    }
+
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            mActionMode = actionMode;
+            MenuInflater inflater = new MenuInflater(getContext());
+            inflater.inflate(R.menu.items_menu,menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+
+            switch (menuItem.getItemId()){
+                case R.id.remove: showDialog();break;
+                default: break;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            mAdapter.clearSelections();
+            mActionMode = null;
+        }
+    };
+
+    private void showDialog(){
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setMessage(R.string.sure)
+                .setTitle(R.string.delete)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeSelectedItems();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .create();
+        dialog.show();
+    }
 }
