@@ -12,8 +12,13 @@ import java.util.List;
 class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolder>{
 
     private static final String TAG = ListItemAdapter.class.getSimpleName();
+    private ListItemAdapterListener mListener=null;
 
     private List<Record> mRecordList;
+
+    public void setListener(ListItemAdapterListener listener){
+        mListener = listener;
+    }
     public ListItemAdapter(List<Record> records){
         mRecordList = records;
     }
@@ -39,7 +44,7 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     @Override
     public void onBindViewHolder(ListItemHolder holder, int position){
         Record record = mRecordList.get(position);
-        holder.applyData(record);
+        holder.applyData(record,position,mListener);
     }
     @Override
     public int getItemCount(){
@@ -58,9 +63,28 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
             priceTextView = itemView.findViewById(R.id.list_item_price);
         }
 
-        public void applyData(Record record){
+        public void applyData(final Record record, final int position, final ListItemAdapterListener listener){
             nameTextView.setText(record.getName());
             priceTextView.setText(record.getPriceBeautify());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener!=null){
+                        listener.onItemClick(record,position);
+                    }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view) {
+                    if(listener!=null){
+                        listener.onItemLongClick(record,position);
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

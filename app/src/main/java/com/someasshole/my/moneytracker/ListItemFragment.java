@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListItemFragment extends Fragment {
+public class ListItemFragment extends Fragment implements ListItemAdapterListener{
 
     private static final String TAG = ListItemFragment.class.getSimpleName();
     private static final String ARGUMENT_TYPE_KEY = "type";
@@ -61,6 +61,7 @@ public class ListItemFragment extends Fragment {
         mRecords = new ArrayList<>();
         mRecords = Collections.emptyList();
         mAdapter = new ListItemAdapter(mRecords);
+        mAdapter.setListener(this);
 
         Bundle args = getArguments();
         type = args.getString(ARGUMENT_TYPE_KEY,TYPE_UNKNOWN);
@@ -156,6 +157,15 @@ public class ListItemFragment extends Fragment {
         }
         super.onActivityResult(requestCode,resultCode,data);
     }
+    @Override
+    public void onItemClick(Record record, int position) {
+        Log.e(TAG, "onItemClick: "+record.name + " position: " +position);
+    }
+
+    @Override
+    public void onItemLongClick(Record record, int position) {
+        Log.e(TAG, "onItemLongClick: "+record.name + " position: " +position);
+    }
 
     private void loadItems(){
         Log.e(TAG,"Loading items");
@@ -174,4 +184,5 @@ public class ListItemFragment extends Fragment {
             }
         });
     }
+
 }
