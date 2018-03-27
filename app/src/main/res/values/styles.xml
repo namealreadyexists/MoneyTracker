@@ -11,4 +11,6 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert"/>
+
 </resources>

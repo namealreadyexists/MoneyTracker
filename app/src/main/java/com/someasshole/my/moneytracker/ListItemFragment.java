@@ -254,7 +254,7 @@ public class ListItemFragment extends Fragment{
     };
 
     private void showDialog(){
-        AlertDialog dialog = new AlertDialog.Builder(getContext())
+        AlertDialog dialog = new AlertDialog.Builder(getContext(),R.style.DialogTheme)
                 .setMessage(R.string.sure)
                 .setTitle(R.string.delete)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
