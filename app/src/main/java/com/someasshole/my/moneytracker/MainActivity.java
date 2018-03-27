@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private MainPagesAdapter mainPagesAdapter;
     private ActionMode mActionMode = null;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTabLayout.setupWithViewPager(mViewPager);
 
-        final FloatingActionButton floatingActionButton = findViewById(R.id.fab1);
+        floatingActionButton = findViewById(R.id.fab1);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +141,14 @@ public class MainActivity extends AppCompatActivity {
         super.onSupportActionModeStarted(mode);
         Log.i(TAG, "onSupportActionModeFinish: ");
         mActionMode=mode;
+        floatingActionButton.hide();
+
     }
     @Override
     public void onSupportActionModeFinished(@NonNull ActionMode mode){
         super.onSupportActionModeFinished(mode);
         Log.i(TAG, "onSupportActionModeFinished: ");
         mActionMode = null;
+        floatingActionButton.show();
     }
 }
