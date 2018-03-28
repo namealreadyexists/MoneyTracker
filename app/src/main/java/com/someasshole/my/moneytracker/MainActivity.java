@@ -112,12 +112,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        Log.i(TAG,"onResume");
         if (((App) getApplication()).isAuthorized()){
+            Log.e(TAG, "authorized");
             initTabs();
         }else{
+            Log.e(TAG, "unauthorized");
             Intent intent = new Intent(this, AuthActivity.class);
+            startActivity(intent);
         }
-        Log.i(TAG,"onResume");
     }
     @Override
     protected void onPause(){

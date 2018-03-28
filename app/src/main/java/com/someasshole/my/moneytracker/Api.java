@@ -14,12 +14,12 @@ public interface Api {
     @GET("items/add")
     Call<AddItemResult> addItem(@Query("price") String price, @Query("name") String name,@Query("type") String type);
 
-    @GET("/items")
+    @GET("items")
     Call<ServerResponse> getItems(@Query("type") String type);
 
-    @POST("/items/add")
+    @POST("items/add")
     Call<ServerResponse> registerRecord(@Body RegisterRecordBody registerRecordBody);
 
-    @DELETE("/items")
+    @DELETE("items")
     Call<ServerResponse> deleteRecord(@Query("id") int id);
 }
