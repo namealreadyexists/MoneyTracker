@@ -44,6 +44,7 @@ public class ListItemFragment extends Fragment{
     private List<Record> mRecords;
     SwipeRefreshLayout swipeRefreshLayout;
     private Api mApi;
+    private App mApp;
 
     public static ListItemFragment createItemsFragment(String type){
         ListItemFragment fragment = new ListItemFragment();
@@ -76,7 +77,8 @@ public class ListItemFragment extends Fragment{
             throw new IllegalArgumentException("Unknown argument type");
         }
         Log.e(TAG, "type="+type);
-        mApi = ((App) getActivity().getApplication()).getApi();
+        mApp = ((App) getActivity().getApplication());
+        mApi = mApp.getApi();
         Log.i(TAG, "onCreate: ");
     }
 
@@ -238,11 +240,7 @@ public class ListItemFragment extends Fragment{
 
         @Override
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-
-            switch (menuItem.getItemId()){
-                case R.id.remove: showDialog();break;
-                default: break;
-            }
+            switch (menuItem.getItemId()){case R.id.remove: showDialog();break;default: break;}
             return false;
         }
 
@@ -270,5 +268,24 @@ public class ListItemFragment extends Fragment{
                 })
                 .create();
         dialog.show();
+    }
+
+    private void addItem(final Record record){
+        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
+
+        call.enqueue(new Callback<AddItemResult>() {
+            @Override
+            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
+                AddItemResult result = response.body();
+                if(result.status.equals("success")){
+                    mAdapter.addData(record);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddItemResult> call, Throwable t) {
+
+            }
+        });
     }
 }

@@ -9,8 +9,8 @@ import android.util.Log;
 public class MainPagesAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = MainPagesAdapter.class.getSimpleName();
-    protected static final int PAGE_INCOMES = 0;
-    protected static final int PAGE_EXPENSES = 1;
+    protected static final int PAGE_EXPENSES = 0;
+    protected static final int PAGE_INCOMES = 1;
     protected static final int PAGE_BALANCE = 2;
 
     private String[] titles;

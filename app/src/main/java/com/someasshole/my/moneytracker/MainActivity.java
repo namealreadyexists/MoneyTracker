@@ -112,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        if (((App) getApplication()).isAuthorized()){
+            initTabs();
+        }else{
+            Intent intent = new Intent(this, AuthActivity.class);
+        }
         Log.i(TAG,"onResume");
     }
     @Override
@@ -150,5 +155,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSupportActionModeFinished: ");
         mActionMode = null;
         floatingActionButton.show();
+    }
+    private void initTabs(){
+        MainPagesAdapter adapter = new MainPagesAdapter(this,getSupportFragmentManager());
+        mViewPager.setAdapter(adapter);
     }
 }

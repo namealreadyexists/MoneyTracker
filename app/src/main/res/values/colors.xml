@@ -10,5 +10,6 @@
     <color name="colorAddItemItems">#95a5a6</color>
     <color name="colorBackgroundItem">#fcc31e</color>
     <color name="colorShadow">#30303030</color>
-    <color name="colorBackgroundSelected">#e67e22</color>
+    <color name="colorBackgroundSelected">#995201</color>
+    <color name="colorIntroButton">#ffffff</color>
 </resources>
