@@ -271,4 +271,22 @@ public class ListItemFragment extends Fragment{
                 .create();
         dialog.show();
     }
+    private void addItem(final Record record){
+        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
+
+        call.enqueue(new Callback<AddItemResult>() {
+            @Override
+            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
+                AddItemResult result = response.body();
+                if(result.status.equals("success")){
+                    mAdapter.addData(record);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddItemResult> call, Throwable t) {
+
+            }
+        });
+    }
 }
