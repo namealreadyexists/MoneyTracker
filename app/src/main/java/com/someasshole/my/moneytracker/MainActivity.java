@@ -112,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        if (((App) getApplication()).isAuthorized()){
+            initTabs();
+        }else{
+            Intent intent = new Intent(this, AuthActivity.class);
+        }
         Log.i(TAG,"onResume");
     }
     @Override
