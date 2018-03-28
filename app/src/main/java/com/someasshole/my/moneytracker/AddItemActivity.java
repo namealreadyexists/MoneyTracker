@@ -1,7 +1,9 @@
 package com.someasshole.my.moneytracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,11 +16,16 @@ public class AddItemActivity extends AppCompatActivity {
     private EditText nameEditText;
     private EditText priceEditText;
     private Button addButton;
+    private Toolbar mToolbar;
 
     private boolean isName;
     private boolean isPrice;
+    private String type;
 
     private static final String TAG = "AddItemActivity";
+    protected static final String TYPE_KEY = "type";
+    protected static final String ARG_NAME = "name";
+    protected static final String ARG_PRICE = "price";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,11 @@ public class AddItemActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.add_item_name);
         priceEditText = findViewById(R.id.add_item_price);
         addButton = findViewById(R.id.add_item_button);
+        mToolbar = findViewById(R.id.toolbar_add_item);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(R.string.add_item_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addButton.setEnabled(false);
         priceEditText.setHint(getApplicationContext().getString(R.string.add_item_ruble_placeholder,getResources().getString(R.string.add_item_price_hint)));
@@ -39,9 +51,18 @@ public class AddItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String price = priceEditText.getText().toString();
+
+                Intent data = new Intent();
+                data.putExtra(ARG_NAME,name);
+                data.putExtra(ARG_PRICE,price);
+
+                setResult(RESULT_OK,data);
                 Log.i(TAG,"Button pressed");
+                finish();
             }
         });
+
+        type = getIntent().getExtras().getString(TYPE_KEY);
     }
 
     private class LocalTextWatcher implements TextWatcher{

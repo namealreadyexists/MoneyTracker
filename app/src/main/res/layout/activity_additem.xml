@@ -8,6 +8,12 @@
     android:orientation="vertical"
     android:background="@drawable/bg_pattern"
     >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_add_item"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:elevation="@dimen/add_item_elevation_title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +22,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/add_item_left_right_indent"
         android:paddingRight="@dimen/add_item_left_right_indent"
+        android:elevation="@dimen/add_item_elevation_fields"
         android:background="@color/colorAddItem"
         >
 

@@ -9,6 +9,10 @@
     <dimen name="add_item_left_right_indent">24dp</dimen>
     <dimen name="add_item_between_button_indent">24dp</dimen>
     <dimen name="add_item_between_edittext_indent">8dp</dimen>
+    <dimen name="add_item_elevation_title">8dp</dimen>
+    <dimen name="add_item_elevation_fields">4dp</dimen>
     <dimen name="list_item_indent">16dp</dimen>
     <dimen name="list_record_indent">8dp</dimen>
+    <dimen name="list_item_action_button">56dp</dimen>
+    <dimen name="list_item_action_button_indent">16dp</dimen>
 </resources>

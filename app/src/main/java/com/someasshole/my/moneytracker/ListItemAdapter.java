@@ -24,6 +24,10 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
             notifyDataSetChanged();
         }
     }
+    protected void addData(Record record){
+        mRecordList.add(record);
+        notifyItemInserted(mRecordList.size());
+    }
 
     @Override
     public ListItemHolder onCreateViewHolder(ViewGroup parent, int viewType){

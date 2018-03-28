@@ -9,10 +9,10 @@ public class Record {
     protected static final String RUB = "₽";
 
     private String name;
-    private int price;
+    private String price;
     private String type;
 
-    protected Record(String name, int price, String type){
+    protected Record(String name, String price, String type){
         this.name = name;
         this.price=price;
         this.type = type;
@@ -26,7 +26,7 @@ public class Record {
         this.name = name;
     }
 
-    protected int getPrice() {
+    protected String getPrice() {
         return price;
     }
 
@@ -34,7 +34,7 @@ public class Record {
         return String.valueOf(this.price)+RUB;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
