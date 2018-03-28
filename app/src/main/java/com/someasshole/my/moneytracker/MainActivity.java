@@ -92,14 +92,14 @@ public class MainActivity extends AppCompatActivity {
                     case ViewPager.SCROLL_STATE_IDLE:
                         floatingActionButton.setEnabled(true);
                         break;
-                        case ViewPager.SCROLL_STATE_DRAGGING:
-                        case ViewPager.SCROLL_STATE_SETTLING:{
-                            if (mActionMode!=null){
-                                mActionMode.finish();
-                            }
-                            floatingActionButton.setEnabled(false);
-                            break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                    case ViewPager.SCROLL_STATE_SETTLING:{
+                        if (mActionMode!=null){
+                            mActionMode.finish();
                         }
+                        floatingActionButton.setEnabled(false);
+                        break;
+                    }
                 }
             }
         });
@@ -155,5 +155,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSupportActionModeFinished: ");
         mActionMode = null;
         floatingActionButton.show();
+    }
+    private void initTabs(){
+        MainPagesAdapter adapter = new MainPagesAdapter(this,getSupportFragmentManager());
+        mViewPager.setAdapter(adapter);
     }
 }
