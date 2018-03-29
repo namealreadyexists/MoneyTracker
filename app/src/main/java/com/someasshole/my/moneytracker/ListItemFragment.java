@@ -1,18 +1,23 @@
 package com.someasshole.my.moneytracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,22 +29,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListItemFragment extends Fragment {
+public class ListItemFragment extends Fragment{
 
     private static final String TAG = ListItemFragment.class.getSimpleName();
     private static final String ARGUMENT_TYPE_KEY = "type";
-    public static final String TYPE_INCOMES = "income";
-    public static final String TYPE_EXPENSES = "expense";
-    private static final String TYPE_UNKNOWN = "unknown";
-    private static final int ADD_ITEM_REQUEST_CODE = 0;
+    protected static final String TYPE_INCOMES = "income";
+    protected static final String TYPE_EXPENSES = "expense";
+    protected static final String TYPE_UNKNOWN = "unknown";
+    protected static final int ADD_ITEM_REQUEST_CODE = 0;
 
     private String type;
-    private ListItemAdapter mAdapter;
+    public ListItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<Record> mRecords;
-    private FloatingActionButton fab;
     SwipeRefreshLayout swipeRefreshLayout;
     private Api mApi;
+    private App mApp;
 
     public static ListItemFragment createItemsFragment(String type){
         ListItemFragment fragment = new ListItemFragment();
@@ -64,6 +69,7 @@ public class ListItemFragment extends Fragment {
         mRecords = new ArrayList<>();
         mRecords = Collections.emptyList();
         mAdapter = new ListItemAdapter(mRecords);
+        mAdapter.setListener(new AdapterListener());
 
         Bundle args = getArguments();
         type = args.getString(ARGUMENT_TYPE_KEY,TYPE_UNKNOWN);
@@ -71,7 +77,8 @@ public class ListItemFragment extends Fragment {
             throw new IllegalArgumentException("Unknown argument type");
         }
         Log.e(TAG, "type="+type);
-        mApi = ((App) getActivity().getApplication()).getApi();
+        mApp = ((App) getActivity().getApplication());
+        mApi = mApp.getApi();
         Log.i(TAG, "onCreate: ");
     }
 
@@ -89,18 +96,9 @@ public class ListItemFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-        fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(),AddItemActivity.class);
-                intent.putExtra(AddItemActivity.TYPE_KEY,type);
-                startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
-            }
-        });
 
         swipeRefreshLayout = view.findViewById(R.id.refresh);
-        swipeRefreshLayout.setColorSchemeColors(Color.BLUE,Color.CYAN,Color.GREEN);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -156,15 +154,16 @@ public class ListItemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode,Intent data){
 
         if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            String name = data.getStringExtra(AddItemActivity.ARG_NAME);
-            String price = data.getStringExtra(AddItemActivity.ARG_PRICE);
+            Log.e(TAG, "onActivityResult: ");
 
-            Record record = new Record(name,price,type);
-            mAdapter.addData(record);
+            Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
 
-            Log.e(TAG, "onActivityResult: name="+name + " | price="+price);
+            if (record.getType().equals(type)){
+                mAdapter.addData(record);
+                Log.e(TAG, "fragment onActivityResult: name="+record.getName()+" | price="+record.getPrice()+" | type="+record.getType());
+            }
+
         }
-
         super.onActivityResult(requestCode,resultCode,data);
     }
 
@@ -182,6 +181,110 @@ public class ListItemFragment extends Fragment {
             public void onFailure(Call<ServerResponse> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
                 Log.e(TAG, "onFailure: " +t.toString());
+            }
+        });
+    }
+
+    /* ACTION MODE */
+
+    protected ActionMode mActionMode = null;
+
+    private void removeSelectedItems(){
+        for (int i = mAdapter.getSelectedItems().size()-1;i>=0;i--){
+            mAdapter.remove(mAdapter.getSelectedItems().get(i));
+        }
+        mActionMode.finish();
+    }
+
+    private class AdapterListener implements ListItemAdapterListener{
+        @Override
+        public void onItemClick(Record record, int position) {
+            if (isInActionMode()){
+                toggleSelection(position);
+            }
+            Log.e(TAG, "onItemClick: "+record.name + " position: " +position);
+        }
+
+        @Override
+        public void onItemLongClick(Record record, int position) {
+            if (isInActionMode()){
+                return;
+            }
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
+            toggleSelection(position);
+            Log.e(TAG, "onItemLongClick: "+record.name + " position: " +position);
+        }
+
+        private boolean isInActionMode(){
+            return mActionMode!=null;
+        }
+
+        private void toggleSelection(int position){
+            mAdapter.toggleSelection(position);
+        }
+    }
+
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            mActionMode = actionMode;
+            MenuInflater inflater = new MenuInflater(getContext());
+            inflater.inflate(R.menu.items_menu,menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()){case R.id.remove: showDialog();break;default: break;}
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            mAdapter.clearSelections();
+            mActionMode = null;
+        }
+    };
+
+    private void showDialog(){
+        AlertDialog dialog = new AlertDialog.Builder(getContext(),R.style.DialogTheme)
+                .setMessage(R.string.sure)
+                .setTitle(R.string.delete)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeSelectedItems();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+    private void addItem(final Record record){
+        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
+
+        call.enqueue(new Callback<AddItemResult>() {
+            @Override
+            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
+                AddItemResult result = response.body();
+                if(result.status.equals("success")){
+                    mAdapter.addData(record);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddItemResult> call, Throwable t) {
+
             }
         });
     }

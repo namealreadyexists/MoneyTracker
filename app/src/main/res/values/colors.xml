@@ -8,6 +8,8 @@
     <color name="colorTextBackground">#84c0c5</color>
     <color name="colorAddItem">#ffffff</color>
     <color name="colorAddItemItems">#95a5a6</color>
-    <color name="colorBackgroundItemName">#fcc31e</color>
-    <color name="colorBackgroundItemPrice">#E6AF1E</color>
+    <color name="colorBackgroundItem">#fcc31e</color>
+    <color name="colorShadow">#30303030</color>
+    <color name="colorBackgroundSelected">#995201</color>
+    <color name="colorIntroButton">#ffffff</color>
 </resources>

@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,8 +25,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private static final String TAG = "AddItemActivity";
     protected static final String TYPE_KEY = "type";
-    protected static final String ARG_NAME = "name";
-    protected static final String ARG_PRICE = "price";
+    protected static final String ARG_RECORD = "record";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +46,16 @@ public class AddItemActivity extends AppCompatActivity {
 
         nameEditText.addTextChangedListener(new LocalTextWatcher(nameEditText));
         priceEditText.addTextChangedListener(new LocalTextWatcher(priceEditText));
+        type = getIntent().getExtras().getString(TYPE_KEY);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String price = priceEditText.getText().toString();
 
+                Record record = new Record(name,price,type);
                 Intent data = new Intent();
-                data.putExtra(ARG_NAME,name);
-                data.putExtra(ARG_PRICE,price);
+                data.putExtra(ARG_RECORD,record);
 
                 setResult(RESULT_OK,data);
                 Log.i(TAG,"Button pressed");
@@ -62,7 +63,15 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
-        type = getIntent().getExtras().getString(TYPE_KEY);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId()==R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class LocalTextWatcher implements TextWatcher{
