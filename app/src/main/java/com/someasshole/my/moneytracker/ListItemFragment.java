@@ -157,7 +157,7 @@ public class ListItemFragment extends Fragment{
             Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
 
             if (record.getType().equals(type)){
-                mAdapter.addData(record);
+                addItem(record);
                 Log.e(TAG, "fragment onActivityResult: name="+record.getName()+" | price="+record.getPrice()+" | type="+record.getType());
             }
 
@@ -165,6 +165,26 @@ public class ListItemFragment extends Fragment{
         super.onActivityResult(requestCode,resultCode,data);
     }
 
+
+    private void loadItems(){
+        Log.e(TAG,"Loading items");
+        Call<List<Record>> call = mApi.getItems(type);
+        call.enqueue(new Callback<List<Record>>() {
+            @Override
+            public void onResponse(Call<List<Record>> call, Response<List<Record>> response) {
+                Log.e(TAG, "onResponse: ");
+                mAdapter.setData(response.body());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onFailure(Call<List<Record>> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                Log.e(TAG, "onFailure: " +t.toString());
+            }
+        });
+    }
+
+    /*
     private void loadItems(){
         Log.e(TAG,"Loading items");
         Call<ServerResponse> call = mApi.getItems(type);
@@ -181,8 +201,25 @@ public class ListItemFragment extends Fragment{
                 Log.e(TAG, "onFailure: " +t.toString());
             }
         });
-    }
+    }*/
+    private void addItem(final Record record){
+        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
 
+        call.enqueue(new Callback<AddItemResult>() {
+            @Override
+            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
+                AddItemResult result = response.body();
+                if(result.status.equals("success")){
+                    mAdapter.addData(record);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddItemResult> call, Throwable t) {
+
+            }
+        });
+    }
     /* ACTION MODE */
 
     protected ActionMode mActionMode = null;
@@ -270,23 +307,5 @@ public class ListItemFragment extends Fragment{
                 })
                 .create();
         dialog.show();
-    }
-    private void addItem(final Record record){
-        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
-
-        call.enqueue(new Callback<AddItemResult>() {
-            @Override
-            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
-                AddItemResult result = response.body();
-                if(result.status.equals("success")){
-                    mAdapter.addData(record);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AddItemResult> call, Throwable t) {
-
-            }
-        });
     }
 }

@@ -1,7 +1,6 @@
 package com.someasshole.my.moneytracker;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +23,18 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     public ListItemAdapter(List<Record> records){
         mRecordList = records;
     }
-    protected void setData(ServerResponse serverResponse){
+
+    protected void setData(List<Record> serverResponse){
+            mRecordList = serverResponse;
+            notifyDataSetChanged();
+    }
+    /*protected void setData(ServerResponse serverResponse){
         Log.e(TAG, "setData: " + serverResponse.status);
         if (serverResponse.status.equals(ServerResponse.STATE_SUCCSESS)) {
             mRecordList = serverResponse.mRecords;
             notifyDataSetChanged();
         }
-    }
+    }*/
     protected void addData(Record record){
         mRecordList.add(record);
         notifyItemInserted(mRecordList.size());
@@ -57,11 +61,8 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     private SparseBooleanArray selections = new SparseBooleanArray();
 
     public void toggleSelection(int position){
-        if(selections.get(position,false)){
-            selections.delete(position);
-        }else{
-            selections.put(position,true);
-        }
+        if(selections.get(position,false)) selections.delete(position);
+        else selections.put(position,true);
         notifyItemChanged(position);
     }
 
