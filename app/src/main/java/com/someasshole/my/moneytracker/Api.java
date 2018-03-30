@@ -12,18 +12,8 @@ public interface Api {
     Call<AuthResult> auth(@Query("social_user_id") String userID);
 
     @POST("items/add")
-    Call<AddItemResult> addItem(@Query("price") String price, @Query("name") String name,@Query("type") String type);
+    Call<AddItemResult> addItem(@Query("price") int price, @Query("name") String name,@Query("type") String type);
 
     @GET("items")
     Call<List<Record>> getItems(@Query("type") String type);
-
-    /*
-    @GET("items")
-    Call<ServerResponse> getItems(@Query("type") String type);
-
-    @POST("items/add")
-    Call<ServerResponse> registerRecord(@Body RegisterRecordBody registerRecordBody);
-
-    @DELETE("items")
-    Call<ServerResponse> deleteRecord(@Query("id") int id);*/
 }

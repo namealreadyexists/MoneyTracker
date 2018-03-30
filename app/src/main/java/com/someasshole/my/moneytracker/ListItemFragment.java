@@ -152,10 +152,9 @@ public class ListItemFragment extends Fragment{
     public void onActivityResult(int requestCode, int resultCode,Intent data){
 
         if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            Log.e(TAG, "onActivityResult: ");
+            Log.e(TAG, "onActivityResult: returning result to parent fragment");
 
             Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
-
             if (record.getType().equals(type)){
                 addItem(record);
                 Log.e(TAG, "fragment onActivityResult: name="+record.getName()+" | price="+record.getPrice()+" | type="+record.getType());
@@ -184,26 +183,11 @@ public class ListItemFragment extends Fragment{
         });
     }
 
-    /*
-    private void loadItems(){
-        Log.e(TAG,"Loading items");
-        Call<ServerResponse> call = mApi.getItems(type);
-        call.enqueue(new Callback<ServerResponse>() {
-            @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                Log.e(TAG, "onResponse: ");
-                mAdapter.setData(response.body());
-                swipeRefreshLayout.setRefreshing(false);
-            }
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
-                Log.e(TAG, "onFailure: " +t.toString());
-            }
-        });
-    }*/
     private void addItem(final Record record){
-        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
+
+        Log.e(TAG, "addItem: price="+record.getPriceInt()+" name="+record.name+" type="+record.type);
+
+        Call<AddItemResult> call = mApi.addItem(record.getPriceInt(),record.name,record.type);
 
         call.enqueue(new Callback<AddItemResult>() {
             @Override
@@ -211,6 +195,8 @@ public class ListItemFragment extends Fragment{
                 AddItemResult result = response.body();
                 if(result.status.equals("success")){
                     mAdapter.addData(record);
+                }else{
+                    Log.e(TAG, "try adding element on backend, status: " + result.status + "record: " + record.price+" "+record.name+ " "+record.type);
                 }
             }
 

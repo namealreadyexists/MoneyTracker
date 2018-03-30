@@ -28,13 +28,6 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
             mRecordList = serverResponse;
             notifyDataSetChanged();
     }
-    /*protected void setData(ServerResponse serverResponse){
-        Log.e(TAG, "setData: " + serverResponse.status);
-        if (serverResponse.status.equals(ServerResponse.STATE_SUCCSESS)) {
-            mRecordList = serverResponse.mRecords;
-            notifyDataSetChanged();
-        }
-    }*/
     protected void addData(Record record){
         mRecordList.add(record);
         notifyItemInserted(mRecordList.size());
