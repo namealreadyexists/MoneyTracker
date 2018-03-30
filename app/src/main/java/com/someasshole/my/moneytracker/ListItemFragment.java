@@ -44,7 +44,6 @@ public class ListItemFragment extends Fragment{
     private List<Record> mRecords;
     SwipeRefreshLayout swipeRefreshLayout;
     private Api mApi;
-    private App mApp;
 
     public static ListItemFragment createItemsFragment(String type){
         ListItemFragment fragment = new ListItemFragment();
@@ -55,13 +54,13 @@ public class ListItemFragment extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
         Log.i(TAG, "onAttach: ");
     }
-    
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -77,8 +76,7 @@ public class ListItemFragment extends Fragment{
             throw new IllegalArgumentException("Unknown argument type");
         }
         Log.e(TAG, "type="+type);
-        mApp = ((App) getActivity().getApplication());
-        mApi = mApp.getApi();
+        mApi = ((App) getActivity().getApplication()).getApi();
         Log.i(TAG, "onCreate: ");
     }
 
@@ -154,18 +152,18 @@ public class ListItemFragment extends Fragment{
     public void onActivityResult(int requestCode, int resultCode,Intent data){
 
         if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            Log.e(TAG, "onActivityResult: ");
+            Log.e(TAG, "onActivityResult: returning result to parent fragment");
 
             Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
-
             if (record.getType().equals(type)){
-                mAdapter.addData(record);
+                addItem(record);
                 Log.e(TAG, "fragment onActivityResult: name="+record.getName()+" | price="+record.getPrice()+" | type="+record.getType());
             }
 
         }
         super.onActivityResult(requestCode,resultCode,data);
     }
+
 
     private void loadItems(){
         Log.e(TAG,"Loading items");
@@ -185,7 +183,29 @@ public class ListItemFragment extends Fragment{
         });
     }
 
+    private void addItem(final Record record){
 
+        Log.e(TAG, "addItem: price="+record.getPriceInt()+" name="+record.name+" type="+record.type);
+
+        Call<AddItemResult> call = mApi.addItem(record.getPriceInt(),record.name,record.type);
+
+        call.enqueue(new Callback<AddItemResult>() {
+            @Override
+            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
+                AddItemResult result = response.body();
+                if(result.status.equals("success")){
+                    mAdapter.addData(record);
+                }else{
+                    Log.e(TAG, "try adding element on backend, status: " + result.status + "record: " + record.price+" "+record.name+ " "+record.type);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddItemResult> call, Throwable t) {
+
+            }
+        });
+    }
     /* ACTION MODE */
 
     protected ActionMode mActionMode = null;
@@ -241,7 +261,11 @@ public class ListItemFragment extends Fragment{
 
         @Override
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-            switch (menuItem.getItemId()){case R.id.remove: showDialog();break;default: break;}
+
+            switch (menuItem.getItemId()){
+                case R.id.remove: showDialog();break;
+                default: break;
+            }
             return false;
         }
 
@@ -269,24 +293,5 @@ public class ListItemFragment extends Fragment{
                 })
                 .create();
         dialog.show();
-    }
-
-    private void addItem(final Record record){
-        Call<AddItemResult> call = mApi.addItem(record.price,record.name,record.type);
-
-        call.enqueue(new Callback<AddItemResult>() {
-            @Override
-            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
-                AddItemResult result = response.body();
-                if(result.status.equals("success")){
-                    mAdapter.addData(record);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AddItemResult> call, Throwable t) {
-
-            }
-        });
     }
 }
