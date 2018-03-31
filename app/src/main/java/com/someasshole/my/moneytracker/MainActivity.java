@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 int currentItem = mViewPager.getCurrentItem();
                 String type = null;
                 switch (currentItem){
-                    case 0: type = ListItemFragment.TYPE_INCOMES;break;
-                    case 1: type = ListItemFragment.TYPE_EXPENSES;break;
+                    case 0: type = ListItemFragment.TYPE_EXPENSES;break;
+                    case 1: type = ListItemFragment.TYPE_INCOMES;break;
                     default: type = ListItemFragment.TYPE_UNKNOWN; break;
                 }
                 intent.putExtra(AddItemActivity.TYPE_KEY,type);
