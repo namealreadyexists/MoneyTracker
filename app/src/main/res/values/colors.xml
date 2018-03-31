@@ -12,9 +12,4 @@
     <color name="colorShadow">#30303030</color>
     <color name="colorBackgroundSelected">#995201</color>
     <color name="colorIntroButton">#ffffff</color>
-
-    <color name="colorBalanceTotal">#3ab7ae</color>
-    <color name="colorBalanceExpense">#f76c41</color>
-    <color name="colorBalanceIncome">#fcc31e</color>
-    <color name="colorBalanceSecondaryText">#95989a</color>
 </resources>

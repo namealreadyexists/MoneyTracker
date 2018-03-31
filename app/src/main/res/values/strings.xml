@@ -22,8 +22,4 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="intro_text">Ваш незаменимый помощник в управлении бюджетом</string>
-    <string name="balance_total">Ваш баланс</string>
-    <string name="balance_expense">Расход</string>
-    <string name="balance_income">Доход</string>
-    <string name="price">%1$d \u20bd</string>
 </resources>
