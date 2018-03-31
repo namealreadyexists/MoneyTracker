@@ -26,11 +26,6 @@ public class DiagramView extends View {
         super(context,attrs,defStyleAttr);
         incomePaint.setColor(getResources().getColor(R.color.colorBalanceIncome));
         expensePaint.setColor(getResources().getColor(R.color.colorBalanceExpense));
-        /*
-        if(isInEditmode()){
-            income = 19000;
-            expense = 4500;
-        }*/
     }
 
     public void update(int income, int expense){
@@ -43,9 +38,9 @@ public class DiagramView extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-
+            drawPieDiagram(canvas);
         } else{
-
+            drawRectDiagram(canvas);
         }
     }
 
@@ -67,7 +62,7 @@ public class DiagramView extends View {
         float expenseAngle = 360.f*expense/(expense+income);
         float incomeAngle = 360.f*income/(expense+income);
 
-        int space = 10;
+        int space = 15;
         int size = Math.min(getWidth(), getHeight() - space*2);
         final int xMargin = (getWidth() -size)/2, yMargin = (getHeight()-size)/2;
 

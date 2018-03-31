@@ -212,10 +212,24 @@ public class ListItemFragment extends Fragment{
 
     private void removeSelectedItems(){
         for (int i = mAdapter.getSelectedItems().size()-1;i>=0;i--){
-            mAdapter.remove(mAdapter.getSelectedItems().get(i));
+            Record record = mAdapter.remove(mAdapter.getSelectedItems().get(i));
+            Call<RemoveItemResult> call = mApi.removeItem(record.id);
+                call.enqueue(new Callback<RemoveItemResult>() {
+                    @Override
+                    public void onResponse(Call<RemoveItemResult> call, Response<RemoveItemResult> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<RemoveItemResult> call, Throwable t) {
+
+                    }
+                });
         }
         mActionMode.finish();
     }
+
+
 
     private class AdapterListener implements ListItemAdapterListener{
         @Override

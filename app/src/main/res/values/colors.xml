@@ -16,4 +16,5 @@
     <color name="colorBalanceExpense">#f76c41</color>
     <color name="colorBalanceIncome">#fcc31e</color>
     <color name="colorBalanceSecondaryText">#95989a</color>
+    <color name="colorBalanceBackground">#ffffff</color>
 </resources>
