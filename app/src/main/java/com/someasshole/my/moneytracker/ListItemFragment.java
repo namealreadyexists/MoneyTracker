@@ -187,12 +187,12 @@ public class ListItemFragment extends Fragment{
 
         Log.e(TAG, "addItem: price="+record.getPriceInt()+" name="+record.name+" type="+record.type);
 
-        Call<AddItemResult> call = mApi.addItem(record.getPriceInt(),record.name,record.type);
+        Call<ItemResult> call = mApi.addItem(record.getPriceInt(),record.name,record.type);
 
-        call.enqueue(new Callback<AddItemResult>() {
+        call.enqueue(new Callback<ItemResult>() {
             @Override
-            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
-                AddItemResult result = response.body();
+            public void onResponse(Call<ItemResult> call, Response<ItemResult> response) {
+                ItemResult result = response.body();
                 if(result.status.equals("success")){
                     mAdapter.addData(record);
                 }else{
@@ -201,7 +201,7 @@ public class ListItemFragment extends Fragment{
             }
 
             @Override
-            public void onFailure(Call<AddItemResult> call, Throwable t) {
+            public void onFailure(Call<ItemResult> call, Throwable t) {
 
             }
         });
@@ -213,15 +213,15 @@ public class ListItemFragment extends Fragment{
     private void removeSelectedItems(){
         for (int i = mAdapter.getSelectedItems().size()-1;i>=0;i--){
             Record record = mAdapter.remove(mAdapter.getSelectedItems().get(i));
-            Call<RemoveItemResult> call = mApi.removeItem(record.id);
-                call.enqueue(new Callback<RemoveItemResult>() {
+            Call<ItemResult> call = mApi.removeItem(record.id);
+                call.enqueue(new Callback<ItemResult>() {
                     @Override
-                    public void onResponse(Call<RemoveItemResult> call, Response<RemoveItemResult> response) {
+                    public void onResponse(Call<ItemResult> call, Response<ItemResult> response) {
 
                     }
 
                     @Override
-                    public void onFailure(Call<RemoveItemResult> call, Throwable t) {
+                    public void onFailure(Call<ItemResult> call, Throwable t) {
 
                     }
                 });

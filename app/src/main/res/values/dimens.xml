@@ -5,15 +5,21 @@
     <dimen name="text_number_size">24sp</dimen>
     <dimen name="text_title_size">20sp</dimen>
     <dimen name="text_tab_size">14sp</dimen>
+    <dimen name="intro_text_size">14sp</dimen>
+    <dimen name="balance_total_text_size">50sp</dimen>
+    <dimen name="balance_small_text_size">20sp</dimen>
+    <dimen name="balance_total_income_expense_text_size">24sp</dimen>
     <!-- sizes -->
     <dimen name="add_item_item_size">68dp</dimen>
     <dimen name="add_item_button_add_size">24dp</dimen>
-    <dimen name="intro_text_size">14sp</dimen>
     <dimen name="intro_text_height">256dp</dimen>
     <dimen name="intro_text_width">64dp</dimen>
     <dimen name="intro_button_radius">32dp</dimen>
     <dimen name="list_item_action_button">56dp</dimen>
     <dimen name="balance_diagram_size">172dp</dimen>
+    <dimen name="intro_picture_size">256dp</dimen>
+    <dimen name="intro_small_title_width">202dp</dimen>
+
     <!-- indents -->
     <dimen name="add_item_left_right_indent">24dp</dimen>
     <dimen name="add_item_between_button_indent">24dp</dimen>

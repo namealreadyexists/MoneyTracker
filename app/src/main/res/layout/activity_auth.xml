@@ -7,11 +7,10 @@
     android:background="@color/colorPrimary"
     >
 
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="256dp"
+        android:layout_height="@dimen/intro_picture_size"
         android:layout_marginTop="8dp"
         android:scaleType="fitXY"
         android:src="@drawable/bg_intro"
@@ -36,7 +35,7 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="202dp"
+        android:layout_width="@dimen/intro_small_title_width"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
