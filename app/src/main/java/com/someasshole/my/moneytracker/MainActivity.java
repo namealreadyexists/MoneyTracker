@@ -89,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
                     case ViewPager.SCROLL_STATE_IDLE:
                         floatingActionButton.setEnabled(true);
                         break;
-                        case ViewPager.SCROLL_STATE_DRAGGING:
-                        case ViewPager.SCROLL_STATE_SETTLING:{
-                            if (mActionMode!=null){
-                                mActionMode.finish();
-                            }
-                            floatingActionButton.setEnabled(false);
-                            break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                    case ViewPager.SCROLL_STATE_SETTLING:{
+                        if (mActionMode!=null){
+                            mActionMode.finish();
                         }
+                        floatingActionButton.setEnabled(false);
+                        break;
+                    }
                 }
             }
         });

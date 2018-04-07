@@ -53,11 +53,8 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     private SparseBooleanArray selections = new SparseBooleanArray();
 
     public void toggleSelection(int position){
-        if(selections.get(position,false)){
-            selections.delete(position);
-        }else{
-            selections.put(position,true);
-        }
+        if(selections.get(position,false)) selections.delete(position);
+        else selections.put(position,true);
         notifyItemChanged(position);
     }
 

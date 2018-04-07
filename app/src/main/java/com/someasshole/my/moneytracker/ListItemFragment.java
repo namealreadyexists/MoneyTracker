@@ -137,7 +137,7 @@ public class ListItemFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode,Intent data){
 
-        if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
+        if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){==
             Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
             if (record.getType().equals(type)){
                 addItem(record);
@@ -146,6 +146,7 @@ public class ListItemFragment extends Fragment{
         }
         super.onActivityResult(requestCode,resultCode,data);
     }
+
 
     private void loadItems(){
         Call<List<Record>> call = mApi.getItems(type);

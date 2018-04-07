@@ -66,7 +66,7 @@ public class App extends Application {
     public boolean isAuthorized(){
         return !TextUtils.isEmpty(getAuthToken());
     }
-
+  
     private class AuthInterceptor implements Interceptor{
         @Override
         public Response intercept(Chain chain) throws IOException{
