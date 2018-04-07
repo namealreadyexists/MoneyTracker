@@ -62,7 +62,7 @@ public class DiagramView extends View {
         float expenseAngle = 360.f*expense/(expense+income);
         float incomeAngle = 360.f*income/(expense+income);
 
-        int space = 15;
+        int space = 35;
         int size = Math.min(getWidth(), getHeight() - space*2);
         final int xMargin = (getWidth() -size)/2, yMargin = (getHeight()-size)/2;
 

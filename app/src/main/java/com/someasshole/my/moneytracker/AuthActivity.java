@@ -29,7 +29,6 @@ public class AuthActivity extends AppCompatActivity {
     protected  void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        Log.e(TAG, "onCreate: ");
         setContentView(R.layout.activity_auth);
         mApi = ((App) getApplication()).getApi();
 
@@ -50,7 +49,6 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        Log.e(TAG, "onStart: ");
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account!=null){
             updateUI(account);
@@ -58,7 +56,6 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void signIn(){
-        Log.i(TAG, "signIn: ");
         Intent signinIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signinIntent,RC_SIGN_IN);
     }
