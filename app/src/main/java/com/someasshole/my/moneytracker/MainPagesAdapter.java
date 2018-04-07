@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 public class MainPagesAdapter extends FragmentPagerAdapter {
 
@@ -21,7 +20,6 @@ public class MainPagesAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int position){
-        Log.i(TAG, "getItem: ");
         switch (position){
             case PAGE_INCOMES:return ListItemFragment.createItemsFragment(ListItemFragment.TYPE_INCOMES);
             case PAGE_EXPENSES: return ListItemFragment.createItemsFragment(ListItemFragment.TYPE_EXPENSES);

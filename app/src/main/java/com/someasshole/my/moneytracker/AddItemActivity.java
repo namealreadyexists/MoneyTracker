@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +44,7 @@ public class AddItemActivity extends AppCompatActivity {
         priceEditText.setHint(getApplicationContext().getString(R.string.add_item_ruble_placeholder,getResources().getString(R.string.add_item_price_hint)));
 
         nameEditText.addTextChangedListener(new LocalTextWatcher(nameEditText));
+
         priceEditText.addTextChangedListener(new LocalTextWatcher(priceEditText));
         type = getIntent().getExtras().getString(TYPE_KEY);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -52,17 +52,13 @@ public class AddItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String price = priceEditText.getText().toString();
-
                 Record record = new Record(name,price,type);
                 Intent data = new Intent();
                 data.putExtra(ARG_RECORD,record);
-
                 setResult(RESULT_OK,data);
-                Log.i(TAG,"Button pressed");
                 finish();
             }
         });
-
     }
 
     @Override
@@ -94,7 +90,20 @@ public class AddItemActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
         }
-
+        /*
+        try{
+                    Log.e(TAG, "onClick: " );
+                    if(Integer.valueOf(price)<2147483647){
+                        Record record = new Record(name,price,type);
+                        Intent data = new Intent();
+                        data.putExtra(ARG_RECORD,record);
+                        setResult(RESULT_OK,data);
+                        finish();
+                    }
+                }catch (IllegalArgumentException e){
+                    Toast.makeText(getApplicationContext(),"Слишком большая сумма",Toast.LENGTH_LONG).show();
+                }
+        */
         @Override
         public void afterTextChanged(Editable editable) {
             if(mViewId==R.id.add_item_name) isName=!(editable.toString().isEmpty());

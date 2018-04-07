@@ -36,6 +36,8 @@
             android:layout_weight="1"
             android:inputType="text"
             android:lines="1"
+            android:ellipsize="end"
+            android:textColorHint="@color/colorBalanceSecondaryText"
             android:textColor="@color/colorAddItemItems"/>
 
         <EditText
@@ -48,6 +50,9 @@
             android:layout_weight="1"
             android:inputType="number"
             android:lines="1"
+            android:ellipsize="end"
+            android:maxLength="9"
+            android:textColorHint="@color/colorBalanceSecondaryText"
             android:textColor="@color/colorAddItemItems"/>
 
         <Button

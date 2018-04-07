@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private MainPagesAdapter mainPagesAdapter;
     private ActionMode mActionMode = null;
     private FloatingActionButton floatingActionButton;
+    private boolean initialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +50,12 @@ public class MainActivity extends AppCompatActivity {
                 int currentItem = mViewPager.getCurrentItem();
                 String type = null;
                 switch (currentItem){
-                    case 0: type = ListItemFragment.TYPE_INCOMES;break;
-                    case 1: type = ListItemFragment.TYPE_EXPENSES;break;
+                    case 0: type = ListItemFragment.TYPE_EXPENSES;break;
+                    case 1: type = ListItemFragment.TYPE_INCOMES;break;
                     default: type = ListItemFragment.TYPE_UNKNOWN; break;
                 }
                 intent.putExtra(AddItemActivity.TYPE_KEY,type);
                 startActivityForResult(intent, ListItemFragment.ADD_ITEM_REQUEST_CODE);
-                Log.e(TAG,"Type: "+ type);
             }
         });
 
@@ -82,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
-
             }
 
             @Override
@@ -107,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        Log.i(TAG,"onStart");
     }
     @Override
     protected void onResume(){
@@ -116,23 +112,20 @@ public class MainActivity extends AppCompatActivity {
             initTabs();
         }else{
             Intent intent = new Intent(this, AuthActivity.class);
+            startActivity(intent);
         }
-        Log.i(TAG,"onResume");
     }
     @Override
     protected void onPause(){
         super.onPause();
-        Log.i(TAG,"onPause");
     }
     @Override
     protected void onStop(){
         super.onStop();
-        Log.i(TAG,"onStrop");
     }
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        Log.i(TAG,"onDestroy");
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode,Intent data){
@@ -144,20 +137,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSupportActionModeStarted(@NonNull ActionMode mode){
         super.onSupportActionModeStarted(mode);
-        Log.i(TAG, "onSupportActionModeFinish: ");
         mActionMode=mode;
         floatingActionButton.hide();
-
     }
     @Override
     public void onSupportActionModeFinished(@NonNull ActionMode mode){
         super.onSupportActionModeFinished(mode);
-        Log.i(TAG, "onSupportActionModeFinished: ");
         mActionMode = null;
         floatingActionButton.show();
     }
     private void initTabs(){
-        MainPagesAdapter adapter = new MainPagesAdapter(this,getSupportFragmentManager());
-        mViewPager.setAdapter(adapter);
+        if(!initialized){
+            MainPagesAdapter adapter = new MainPagesAdapter(this,getSupportFragmentManager());
+            mViewPager.setAdapter(adapter);
+            initialized = true;
+        }
     }
 }
