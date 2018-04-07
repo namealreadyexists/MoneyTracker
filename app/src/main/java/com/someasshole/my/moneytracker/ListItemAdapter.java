@@ -23,10 +23,9 @@ class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolde
     public ListItemAdapter(List<Record> records){
         mRecordList = records;
     }
-
     protected void setData(List<Record> serverResponse){
-            mRecordList = serverResponse;
-            notifyDataSetChanged();
+        mRecordList = serverResponse;
+        notifyDataSetChanged();
     }
     protected void addData(Record record){
         mRecordList.add(record);

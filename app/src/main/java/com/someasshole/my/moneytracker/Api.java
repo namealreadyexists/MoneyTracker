@@ -10,10 +10,15 @@ import retrofit2.http.Query;
 public interface Api {
     @GET("auth")
     Call<AuthResult> auth(@Query("social_user_id") String userID);
-
     @POST("items/add")
-    Call<AddItemResult> addItem(@Query("price") int price, @Query("name") String name,@Query("type") String type);
+    Call<ItemResult> addItem(@Query("price") int price, @Query("name") String name,@Query("type") String type);
+
+    @POST("items/remove")
+    Call<ItemResult> removeItem(@Query("id") int id);
 
     @GET("items")
     Call<List<Record>> getItems(@Query("type") String type);
+
+    @GET("balance")
+    Call<BalanceResult> balance();
 }

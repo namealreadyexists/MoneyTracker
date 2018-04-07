@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,13 +53,12 @@ public class ListItemFragment extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        Log.i(TAG, "onAttach: ");
     }
-    
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -75,16 +73,13 @@ public class ListItemFragment extends Fragment{
         if(type.equals(TYPE_UNKNOWN)){
             throw new IllegalArgumentException("Unknown argument type");
         }
-        Log.e(TAG, "type="+type);
         mApi = ((App) getActivity().getApplication()).getApi();
-        Log.i(TAG, "onCreate: ");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreateView(inflater,container,savedInstanceState);
-        Log.i(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_itemlist, container, false);
         return view;
     }
@@ -105,59 +100,47 @@ public class ListItemFragment extends Fragment{
         });
 
         loadItems();
-        Log.i(TAG, "onViewCreated: ");
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated: ");
     }
     @Override
     public void onStart(){
         super.onStart();
-        Log.i(TAG, "onStart: ");
     }
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "onResume: ");
     }
     @Override
     public void onPause(){
         super.onPause();
-        Log.i(TAG, "onPause: ");
     }
     @Override
     public void onStop(){
         super.onStop();
-        Log.i(TAG, "onStop: ");
     }
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        Log.i(TAG, "onDestroyView: ");
     }
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
     }
     @Override
     public void onDetach(){
         super.onDetach();
-        Log.i(TAG, "onDetach: ");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode,Intent data){
 
-        if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            Log.e(TAG, "onActivityResult: returning result to parent fragment");
-
+        if(requestCode==ADD_ITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){==
             Record record = data.getParcelableExtra(AddItemActivity.ARG_RECORD);
             if (record.getType().equals(type)){
                 addItem(record);
-                Log.e(TAG, "fragment onActivityResult: name="+record.getName()+" | price="+record.getPrice()+" | type="+record.getType());
             }
 
         }
@@ -166,42 +149,33 @@ public class ListItemFragment extends Fragment{
 
 
     private void loadItems(){
-        Log.e(TAG,"Loading items");
         Call<List<Record>> call = mApi.getItems(type);
         call.enqueue(new Callback<List<Record>>() {
             @Override
             public void onResponse(Call<List<Record>> call, Response<List<Record>> response) {
-                Log.e(TAG, "onResponse: ");
                 mAdapter.setData(response.body());
                 swipeRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onFailure(Call<List<Record>> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                Log.e(TAG, "onFailure: " +t.toString());
             }
         });
     }
 
     private void addItem(final Record record){
-
-        Log.e(TAG, "addItem: price="+record.getPriceInt()+" name="+record.name+" type="+record.type);
-
-        Call<AddItemResult> call = mApi.addItem(record.getPriceInt(),record.name,record.type);
-
-        call.enqueue(new Callback<AddItemResult>() {
+        Call<ItemResult> call = mApi.addItem(record.getPriceInt(),record.name,record.type);
+        call.enqueue(new Callback<ItemResult>() {
             @Override
-            public void onResponse(Call<AddItemResult> call, Response<AddItemResult> response) {
-                AddItemResult result = response.body();
+            public void onResponse(Call<ItemResult> call, Response<ItemResult> response) {
+                ItemResult result = response.body();
                 if(result.status.equals("success")){
                     mAdapter.addData(record);
-                }else{
-                    Log.e(TAG, "try adding element on backend, status: " + result.status + "record: " + record.price+" "+record.name+ " "+record.type);
                 }
             }
 
             @Override
-            public void onFailure(Call<AddItemResult> call, Throwable t) {
+            public void onFailure(Call<ItemResult> call, Throwable t) {
 
             }
         });
@@ -212,10 +186,21 @@ public class ListItemFragment extends Fragment{
 
     private void removeSelectedItems(){
         for (int i = mAdapter.getSelectedItems().size()-1;i>=0;i--){
-            mAdapter.remove(mAdapter.getSelectedItems().get(i));
+            Record record = mAdapter.remove(mAdapter.getSelectedItems().get(i));
+            Call<ItemResult> call = mApi.removeItem(record.id);
+                call.enqueue(new Callback<ItemResult>() {
+                    @Override
+                    public void onResponse(Call<ItemResult> call, Response<ItemResult> response) {
+                    }
+                    @Override
+                    public void onFailure(Call<ItemResult> call, Throwable t) {
+                    }
+                });
         }
         mActionMode.finish();
     }
+
+
 
     private class AdapterListener implements ListItemAdapterListener{
         @Override
@@ -223,7 +208,6 @@ public class ListItemFragment extends Fragment{
             if (isInActionMode()){
                 toggleSelection(position);
             }
-            Log.e(TAG, "onItemClick: "+record.name + " position: " +position);
         }
 
         @Override
@@ -233,7 +217,6 @@ public class ListItemFragment extends Fragment{
             }
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
             toggleSelection(position);
-            Log.e(TAG, "onItemLongClick: "+record.name + " position: " +position);
         }
 
         private boolean isInActionMode(){

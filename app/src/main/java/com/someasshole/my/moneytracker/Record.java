@@ -39,6 +39,12 @@ public class Record implements Parcelable{
         return (int) Integer.valueOf(tmp);
     }
 
+    protected int getPriceInt() {
+        String tmp = this.price;
+        tmp=tmp.replace(RUB,"");
+        return (int) Integer.valueOf(tmp);
+    }
+
     protected String getPriceBeautify(){
         return String.valueOf(this.price)+RUB;
     }

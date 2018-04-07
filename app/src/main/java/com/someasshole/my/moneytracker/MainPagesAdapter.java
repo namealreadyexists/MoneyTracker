@@ -4,13 +4,12 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 public class MainPagesAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = MainPagesAdapter.class.getSimpleName();
-    protected static final int PAGE_INCOMES = 0;
-    protected static final int PAGE_EXPENSES = 1;
+    protected static final int PAGE_EXPENSES = 0;
+    protected static final int PAGE_INCOMES = 1;
     protected static final int PAGE_BALANCE = 2;
 
     private String[] titles;
@@ -21,7 +20,6 @@ public class MainPagesAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int position){
-        Log.i(TAG, "getItem: ");
         switch (position){
             case PAGE_INCOMES:return ListItemFragment.createItemsFragment(ListItemFragment.TYPE_INCOMES);
             case PAGE_EXPENSES: return ListItemFragment.createItemsFragment(ListItemFragment.TYPE_EXPENSES);
